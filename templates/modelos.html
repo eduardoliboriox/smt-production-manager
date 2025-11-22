@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Modelos — Sistema de Metas{% endblock %}
+{% block page_title %}Modelos Cadastrados{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <div id="mensagemModelos"></div>
+
+  <!-- ===================== TABELA DE MODELOS ===================== -->
+  <div class="card mb-4 p-3 shadow-sm">
+    <h5 class="mb-3"><i class="bi bi-table"></i> Modelos Cadastrados</h5>
+    <table id="tblModelos" class="table table-striped table-bordered nowrap" style="width:100%">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Cliente</th>
+          <th>Setor</th>
+          <th>Meta/Hora</th>
+          <th>Pessoas</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- ===================== EDITAR MODELO ===================== -->
+  <div class="card mb-4 p-3 shadow-sm">
+    <h5 class="mb-3 text-warning"><i class="bi bi-pencil-square"></i> Editar Modelo</h5>
+    <form id="editarForm" class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label">Selecione o modelo</label>
+        <select class="form-select" name="codigo" id="selectEditar" required>
+          {% for c in codigos %}
+            <option>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Nova Meta/Hora</label>
+        <input class="form-control" name="nova_meta" type="number" placeholder="Deixe vazio para manter">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Novas Pessoas</label>
+        <input class="form-control" name="novas_pessoas" type="number" placeholder="Deixe vazio para manter">
+      </div>
+      <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-warning w-100">Atualizar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ===================== EXCLUIR MODELO ===================== -->
+  <div class="card mb-4 p-3 shadow-sm">
+    <h5 class="mb-3 text-danger"><i class="bi bi-trash3"></i> Excluir Modelo</h5>
+    <form id="excluirForm" class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label">Selecione o modelo</label>
+        <select class="form-select" name="codigo" id="selectExcluir" required>
+          {% for c in codigos %}
+            <option>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-danger w-100">Excluir</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function(){
+
+  // Inicializa DataTable
+  const tabela = $('#tblModelos').DataTable({
+      ajax: '/listar',
+      columns: [
+          {data: 'codigo'},
+          {data: 'cliente'},
+          {data: 'setor'},
+          {data: 'meta_padrao'},
+          {data: 'pessoas_padrao'}
+      ],
+      responsive: true,
+      pageLength: 10,
+      language: {
+          url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
+      }
+  });
+
+  // Atualiza selects após ação
+  function atualizarSelects() {
+      fetch('/listar')
+        .then(resp => resp.json())
+        .then(data => {
+            const editar = $('#selectEditar');
+            const excluir = $('#selectExcluir');
+            if (data.length > 0) {
+                editar.empty();
+                excluir.empty();
+                data.forEach(d => {
+                    editar.append(`<option>${d.codigo}</option>`);
+                    excluir.append(`<option>${d.codigo}</option>`);
+                });
+            }
+        });
+  }
+
+  // EDITAR
+  $('#editarForm').on('submit', async function(e){
+      e.preventDefault();
+      const fd = new FormData(this);
+      await fetch('/editar', {method:'POST', body:fd});
+      $('#mensagemModelos').html(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                     Modelo atualizado com sucesso!
+                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                   </div>`);
+      tabela.ajax.reload(null, false);
+      atualizarSelects();
+  });
+
+  // EXCLUIR
+  $('#excluirForm').on('submit', async function(e){
+      e.preventDefault();
+      const fd = new FormData(this);
+      await fetch('/excluir', {method:'POST', body:fd});
+      $('#mensagemModelos').html(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                     Modelo excluído com sucesso!
+                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                   </div>`);
+      tabela.ajax.reload(null, false);
+      atualizarSelects();
+  });
+
+});
+
+</script>
+{% endblock %}

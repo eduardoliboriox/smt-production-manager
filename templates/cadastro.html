@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Cadastro — Sistema de Metas{% endblock %}
+{% block page_title %}Cadastro de Modelo{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <!-- Mensagem de retorno -->
+  <div id="mensagemCadastro"></div>
+
+  <div class="card shadow-sm p-4">
+    <h5 class="mb-3"><i class="bi bi-file-earmark-plus"></i> Novo Modelo</h5>
+
+    <form id="cadastroForm" class="row g-4">
+
+      <div class="col-md-3">
+        <label class="form-label fw-semibold">Código</label>
+        <input class="form-control form-control-lg" name="codigo" required>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label fw-semibold">Cliente</label>
+        <input class="form-control form-control-lg" name="cliente" required>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label fw-semibold">Setor</label>
+        <select class="form-select form-select-lg" name="setor">
+          <option>IM</option>
+          <option>PA</option>
+          <option>VTT</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label fw-semibold">Meta / Hora</label>
+        <input class="form-control form-control-lg" name="meta" type="number" required>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label fw-semibold">Pessoas padrão</label>
+        <input class="form-control form-control-lg" name="pessoas" type="number" required>
+      </div>
+
+      <div class="col-12 mt-3">
+        <button type="submit" class="btn btn-primary btn-lg px-4">
+          <i class="bi bi-save"></i> Cadastrar Modelo
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById('cadastroForm').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const fd = new FormData(e.target);
+
+    const resp = await fetch('/cadastrar', {
+        method: 'POST',
+        body: fd,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' } // identifica AJAX
+    });
+
+    const data = await resp.json();
+
+    // Exibe a mensagem de retorno
+    const msgDiv = document.getElementById('mensagemCadastro');
+    msgDiv.innerHTML = `<div class="alert alert-${data.sucesso ? 'success' : 'danger'} alert-dismissible fade show" role="alert">
+                          ${data.mensagem}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>`;
+
+    // Atualiza a tabela de modelos, se existir
+    if ($.fn.DataTable.isDataTable('#tblModelos')) {
+        $('#tblModelos').DataTable().ajax.reload(null, false);
+    }
+
+    // Limpa o formulário se sucesso
+    if (data.sucesso) e.target.reset();
+});
+</script>
+{% endblock %}

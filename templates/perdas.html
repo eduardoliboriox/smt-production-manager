@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Calcular Perda — Sistema de Metas{% endblock %}
+{% block page_title %}Calcular Perda de Produção{% endblock %}
+
+{% block content %}
+<div class="card p-4">
+  <form id="perdaForm" class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label">Meta / Hora</label>
+      <input class="form-control" name="meta_hora" type="number" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Produção real</label>
+      <input class="form-control" name="producao_real" type="number" required>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-danger mt-2 w-100" type="submit">
+        <i class="bi bi-calculator"></i> Calcular Perda
+      </button>
+    </div>
+  </form>
+
+  <div id="resultadoPerda" class="mt-3 p-3 border rounded shadow-sm bg-light text-center fw-semibold"></div>
+</div>
+
+<script>
+document.getElementById('perdaForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const resp = await fetch('/calcular_perda', {method:'POST', body: fd});
+  const data = await resp.json();
+  document.getElementById('resultadoPerda').innerHTML = data.resultado;
+});
+</script>
+{% endblock %}

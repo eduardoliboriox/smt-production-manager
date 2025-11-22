@@ -1,0 +1,42 @@
+:root{
+  --sidebar-width: 240px;
+}
+html[data-bs-theme="light"] {
+  --bg: #f8f9fa;
+  --card: #ffffff;
+  --text: #212529;
+}
+html[data-bs-theme="dark"] {
+  --bg: #0f1720;
+  --card: #0b1320;
+  --text: #e6eef8;
+}
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+.app { min-height: 100vh; }
+.sidebar {
+  width: var(--sidebar-width);
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(13,110,253,0.08), transparent);
+  border-right: 1px solid rgba(0,0,0,0.04);
+  padding-top: 18px;
+}
+.sidebar .nav-link {
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+.sidebar .nav-link:hover, .sidebar .nav-link.active {
+  background: rgba(13,110,253,0.08);
+  color: #0d6efd;
+}
+.header { background: var(--card); }
+.card { background: var(--card); border: none; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); }
+@media(max-width: 767px){
+  .sidebar { position: fixed; left: -260px; z-index: 1050; transition: left .25s;}
+  .sidebar.open { left: 0; }
+}
+.table { background: transparent; }
