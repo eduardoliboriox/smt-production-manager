@@ -37,6 +37,9 @@
 {% endif %}
 
 <script>
+const resultadoDiv = document.getElementById('resultadoPerda');
+const btnCopiar = document.getElementById('btnCopiar');
+
 document.getElementById('perdaForm').addEventListener('submit', async e => {
   e.preventDefault();
 
@@ -48,11 +51,36 @@ document.getElementById('perdaForm').addEventListener('submit', async e => {
 
   const data = await resp.json();
 
-  document.getElementById('resultadoPerda').innerHTML = `
+  const textoResultado =
+    `Tempo perdido: ${data.tempo_perdido} | ` +
+    `Peças faltantes: ${data.pecas_faltantes}`;
+
+  resultadoDiv.innerHTML = `
     ⏱️ <strong>Tempo perdido:</strong> ${data.tempo_perdido}<br>
     📦 <strong>Peças faltantes:</strong> ${data.pecas_faltantes}
   `;
+
+  // guarda texto para copiar
+  btnCopiar.dataset.texto = textoResultado;
+
+  // mostra botão
+  btnCopiar.classList.remove('d-none');
+});
+
+btnCopiar.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(btnCopiar.dataset.texto);
+
+    btnCopiar.innerHTML = '✅ Copiado!';
+    setTimeout(() => {
+      btnCopiar.innerHTML = '<i class="bi bi-clipboard"></i> Copiar resultado';
+    }, 1500);
+
+  } catch (err) {
+    alert('Erro ao copiar o resultado');
+  }
 });
 </script>
+
 
 {% endblock %}
