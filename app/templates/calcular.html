@@ -166,50 +166,38 @@ document.getElementById('stopTimer').addEventListener('click', () => {
 });
 </script>
 
-
 <script>
-document.getElementById('calcRapidoForm').addEventListener('submit', e => {
+document.getElementById('smtForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const meta_hora  = Number(e.target.meta_hora.value);
-  const minutos    = Number(e.target.minutos.value);
-  const blank      = Number(e.target.blank.value);
-  const usarBlank  = document.getElementById("usarBlank").checked;
+  const tempo = document.getElementById('tempoMontagem').value;
+  const blank = document.getElementById('blankSMT').value;
 
-  // cálculo bruto normal
-  let bruto = (meta_hora / 60) * minutos;
+  const form = new FormData();
+  form.append('tempo_montagem', tempo);
+  form.append('blank', blank);
 
-  // sem blank → cálculo normal (mantém seu arredondamento atual)
-  if (!usarBlank || blank <= 0) {
-      let decimal = bruto - Math.floor(bruto);
-      let resultado = decimal < 0.50 
-                      ? Math.floor(bruto) 
-                      : Math.ceil(bruto);
+  const resp = await fetch('/api/smt/calcular_meta', {
+    method: 'POST',
+    body: form
+  });
 
-      document.getElementById('resultadoCalcRapido').innerHTML =
-        "Resultado: <strong>" + resultado + "</strong>";
-      return;
+  const data = await resp.json();
+
+  if (data.erro) {
+    document.getElementById('resultadoSMT').innerHTML = data.erro;
+    return;
   }
 
-  // --- COM BLANK LIGADO ---
-  // Ajuste para múltiplos do blank
-  let resultado_ajustado = Math.ceil(bruto / blank) * blank;
-
-  document.getElementById('resultadoCalcRapido').innerHTML =
-    "Resultado Ajustado: <strong>" + resultado_ajustado + "</strong>";
+  document.getElementById('resultadoSMT').innerHTML = `
+    Meta/Hora: <strong>${data.meta_hora}</strong><br>
+    Meta Teórica: ${data.meta_teorica}<br>
+    Meta c/ Perda: ${data.meta_com_perda}
+  `;
 });
-
-  // Mostrar ou ocultar o campo Blank
-  document.getElementById("usarBlank").addEventListener("change", function () {
-      const campoBlank = document.getElementById("campoBlank");
-      if (this.checked) {
-          campoBlank.style.display = "block";
-      } else {
-          campoBlank.style.display = "none";
-      }
-});
-
 </script>
+
+
 
 <script>
 document.getElementById('calcForm').addEventListener('submit', async e => {
@@ -227,6 +215,33 @@ document.getElementById('calcForm').addEventListener('submit', async e => {
 });
 </script>
 
+<script>
+document.getElementById('smtInversoForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const meta = document.getElementById('metaHoraInv').value;
+  const blank = document.getElementById('blankInv').value;
+
+  const form = new FormData();
+  form.append('meta_hora', meta);
+  form.append('blank', blank);
+
+  const resp = await fetch('/api/smt/calcular_tempo', {
+    method: 'POST',
+    body: form
+  });
+
+  const data = await resp.json();
+
+  if (data.erro) {
+    document.getElementById('resultadoInverso').innerHTML = data.erro;
+    return;
+  }
+
+  document.getElementById('resultadoInverso').innerHTML =
+    `Tempo de montagem: <strong>${data.tempo_montagem} s</strong>`;
+});
+</script>
 
 
 {% endblock %}
