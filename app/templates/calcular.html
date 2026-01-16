@@ -199,6 +199,55 @@ document.getElementById("smtForm").addEventListener("submit", async e => {
 </script>
 
 <script>
+const usarBlankCheckbox = document.getElementById("usarBlank");
+const campoBlank = document.getElementById("campoBlank");
+
+usarBlankCheckbox.addEventListener("change", () => {
+  campoBlank.style.display = usarBlankCheckbox.checked ? "block" : "none";
+});
+
+document.getElementById("calcRapidoForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const form = e.target;
+  const fd = new FormData(form);
+
+  // se não usar blank, remove
+  if (!usarBlankCheckbox.checked) {
+    fd.delete("blank");
+  }
+
+  const r = await fetch("/api/modelos/calculo_rapido", {
+    method: "POST",
+    body: fd
+  });
+
+  const data = await r.json();
+
+  if (!data.sucesso) {
+    document.getElementById("resultadoCalcRapido").innerHTML =
+      `<span class="text-danger">${data.erro}</span>`;
+    return;
+  }
+
+  let html = "";
+
+  if (data.dados.blanks !== undefined) {
+    html = `
+      Blanks produzidos: <strong>${data.dados.blanks}</strong><br>
+      Placas reais: <strong>${data.dados.placas_reais}</strong>
+    `;
+  } else {
+    html = `
+      Produção estimada: <strong>${data.dados.placas}</strong> placas
+    `;
+  }
+
+  document.getElementById("resultadoCalcRapido").innerHTML = html;
+});
+</script>
+
+<script>
 document.getElementById('calcForm').addEventListener('submit', async e => {
   e.preventDefault();
 

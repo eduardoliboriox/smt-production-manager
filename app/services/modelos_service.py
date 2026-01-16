@@ -108,6 +108,20 @@ def calcular_tempo_smt_inverso(meta_hora, blank):
     except Exception:
         return {"sucesso": False, "erro": "Erro no cálculo inverso"}
 
+def calculo_rapido(meta_hora, minutos, blank=None):
+    placas = (meta_hora / 60) * minutos
+
+    if not blank or blank <= 1:
+        return {
+            "placas": round(placas, 2)
+        }
+
+    blanks = math.floor(placas / blank)
+
+    return {
+        "blanks": blanks,
+        "placas_reais": blanks * blank
+    }
 
 
 
