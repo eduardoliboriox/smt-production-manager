@@ -30,3 +30,5 @@ def inserir(dados):
                 dados["meta"],
                 dados["fase"]
             ))
+        conn.commit()  
+
