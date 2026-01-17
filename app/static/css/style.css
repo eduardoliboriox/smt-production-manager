@@ -225,6 +225,7 @@ body {
   padding: 16px;
   background: #fff;
   height: 100%;
+  border-left: 4px solid var(--primary-color);
 }
 
 .card-modelo .codigo {
