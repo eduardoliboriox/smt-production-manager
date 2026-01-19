@@ -11,11 +11,14 @@ def resumo_dashboard():
     por_fase = {}
 
     for m in modelos:
-        setor = m["setor"]
-        fase = m["fase"]
-
-        por_setor[setor] = por_setor.get(setor, 0) + 1
-        por_fase[fase] = por_fase.get(fase, 0) + 1
+        setor = m.get("setor")
+        fase = m.get("fase")
+    
+        if setor:
+            por_setor[setor] = por_setor.get(setor, 0) + 1
+    
+        if fase:
+            por_fase[fase] = por_fase.get(fase, 0) + 1
 
     ultimo_modelo = buscar_ultimo_modelo()
 
