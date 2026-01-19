@@ -1,10 +1,6 @@
----
-
 # 🟦 SMT Production Manager
 
 **SMT Production Manager** é um sistema web desenvolvido para **engenharia e produção SMT**, com foco em **padronização de dados**, **cálculos de performance** e **apoio à definição de metas de produção**.
-
-👉 **Visualize a aplicação real através do link no final deste README.**
 
 ---
 
