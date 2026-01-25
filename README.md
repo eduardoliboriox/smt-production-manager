@@ -97,41 +97,43 @@ project/
 
 ## ⚙️ Tecnologias Utilizadas
 
-* Python (Flask)
-* HTML5
-* CSS3
-* JavaScript (Vanilla)
+* Python 3
+* Flask
 * Jinja2
+* HTML5 / CSS3
+* JavaScript (Vanilla)
 * PostgreSQL
-* LocalStorage
+* Bootstrap 5
+* Railway
 
 ---
 
-## ▶️ Como Rodar o Projeto
+## ▶️ Como Rodar o Projeto Localmente
 
-### 1. Clonar o repositório
+### 1️⃣ Clonar o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/seu-usuario/venttos-factory-metrics.git
+cd venttos-factory-metrics
 ```
 
-### 2. Criar e ativar o ambiente virtual
+### 2️⃣ Criar e ativar o ambiente virtual
 
 ```bash
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Linux / Mac
 ```
 
-### 3. Instalar as dependências
+### 3️⃣ Instalar dependências
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configurar variáveis de ambiente
+### 4️⃣ Configurar variáveis de ambiente
 
-Crie um arquivo `.env` na raiz do projeto:
+Crie um arquivo `.env` na raiz:
 
 ```env
 FLASK_ENV=development
@@ -139,13 +141,13 @@ SECRET_KEY=supersecretkey
 DATABASE_URL=postgresql://user:password@localhost:5432/dbname
 ```
 
-### 5. Rodar a aplicação
+### 5️⃣ Executar a aplicação
 
 ```bash
 python run.py
 ```
 
-Acesse no navegador:
+Acesse:
 
 ```
 http://127.0.0.1:5000
@@ -155,29 +157,29 @@ http://127.0.0.1:5000
 
 ## 📌 Observações
 
-* O sistema não utiliza login
-* Dados temporários podem ser salvos localmente no navegador
-* Os modelos cadastrados são persistidos no banco de dados
-* Projeto ideal para uso em engenharia, produção ou controle pessoal
+* Não possui autenticação (por enquanto)
+* Foco em uso interno / industrial
+* Estrutura pronta para escalar
+* Código organizado para fácil manutenção
 
 ---
 
-## 🔗 Acesse a aplicação
+## 🚀 Deploy
 
-👉 **Link:**
-não disponivel
+* Deploy contínuo via **Railway**
+* Uso de `Procfile`
+* Banco PostgreSQL gerenciado
 
 ---
 
 ## 👨‍💻 Autor
 
 Desenvolvido por **Eduardo Libório**
-📧 [eduardosoleno@protonmail.com](mailto:eduardosoleno@protonmail.com)
 
+📧 [eduardosoleno@protonmail.com](mailto:eduardosoleno@protonmail.com)
 
 ---
 
 ## 📄 Licença
 
 Projeto de uso privado / interno.
-
